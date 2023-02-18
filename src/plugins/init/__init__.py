@@ -45,7 +45,7 @@ async def sync_groups():
 
         send_id_path = define.SEND_GROUP_ID_PATH / \
             f'{group_id}.{define.SEND_FILE_FORMAT}'
-        send_id_path.touch(exist_ok=True)
+        # send_id_path.touch(exist_ok=True)
         os.symlink(send_id_path.absolute(), define.SEND_GROUP_NAME_PATH /
                    f'{group_name}_{group_id}.{define.SEND_FILE_FORMAT}')
         os.symlink(send_id_path.absolute(), define.SEND_GROUP_MEMO_PATH /
@@ -73,7 +73,7 @@ async def sync_friends():
 
         send_id_path = define.SEND_USER_ID_PATH / \
             f'{user_id}.{define.SEND_FILE_FORMAT}'
-        send_id_path.touch(exist_ok=True)
+        # send_id_path.touch(exist_ok=True)
         os.symlink(send_id_path.absolute(), define.SEND_USER_NAME_PATH /
                    f'{nickname}_{user_id}.{define.SEND_FILE_FORMAT}')
         os.symlink(send_id_path.absolute(), define.SEND_USER_MEMO_PATH /

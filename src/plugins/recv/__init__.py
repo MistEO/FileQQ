@@ -16,6 +16,11 @@ any_msg = on_message(
 
 @any_msg.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
+    send_id_path = define.SEND_GROUP_ID_PATH / \
+        f'{event.group_id}.{define.SEND_FILE_FORMAT}'
+    if not send_id_path.exists():
+        send_id_path.touch()
+
     user_info = await get_bot().call_api('get_group_member_info', **{
         'group_id': event.group_id,
         'user_id': event.user_id,
@@ -40,6 +45,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 
 @any_msg.handle()
 async def _(bot: Bot, event: PrivateMessageEvent, state: T_State):
+    send_id_path = define.SEND_USER_ID_PATH / \
+        f'{event.user_id}.{define.SEND_FILE_FORMAT}'
+    if not send_id_path.exists():
+        send_id_path.touch()
 
     time = datetime.now().strftime('%H:%M:%S')
     message = event.raw_message
