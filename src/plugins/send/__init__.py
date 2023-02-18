@@ -30,12 +30,12 @@ async def sync_group():
     if not message:
         return
 
+    path, context = message
+    group_id = Path(path).stem
+
     # 先清空文件，避免重复发送
     with open(path, 'w') as f:
         pass
-
-    path, context = message
-    group_id = Path(path).stem
 
     logger.info(f'发送群消息: {group_id}: {context}')
     await get_bot().call_api('send_group_msg', **{
@@ -43,12 +43,12 @@ async def sync_group():
         'group_id': group_id
     })
 
+    time = datetime.now().strftime('%H:%M:%S')
     text = f'''
 **我** : _{time}_  
 - {context}
 
 '''
-    time = datetime.now().strftime('%H:%M:%S')
     with open(define.RECV_GROUP_ID_PATH / f'{group_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
         f.write(text)
 
@@ -58,12 +58,12 @@ async def sync_friend():
     if not message:
         return
 
+    path, context = message
+    user_id = Path(path).stem
+
     # 先清空文件，避免重复发送
     with open(path, 'w') as f:
         pass
-
-    path, context = message
-    user_id = Path(path).stem
 
     logger.info(f'发送私聊消息: {user_id}: {context}')
     await get_bot().call_api('send_private_msg', **{
