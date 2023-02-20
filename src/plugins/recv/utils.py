@@ -1,5 +1,5 @@
 from nonebot import get_bot
-from nonebot.adapters.onebot.v11 import Event
+from nonebot.adapters.onebot.v11 import Event, MessageSegment
 
 import httpx
 from pathlib import Path
@@ -22,6 +22,10 @@ def image_html(path: Path, scale: str = '30%') -> str:
 async def nbevent_2_mdmsg(event: Event) -> str:
     result = ''
     for seg in event.message:
+        if isinstance(seg, dict):
+            # for message_sent
+            seg = MessageSegment(**seg)
+
         if seg.type == 'image':
             # 下载图片
             url = seg.data['url']

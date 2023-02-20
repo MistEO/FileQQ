@@ -17,6 +17,10 @@ any_msg = on_message(
 
 @any_msg.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
+    await handle_group_message(bot, event, state)
+
+
+async def handle_group_message(bot: Bot, event: Event, state: T_State, is_self: bool = False):
     send_id_path = define.SEND_GROUP_ID_PATH / \
         f'{event.group_id}.{define.SEND_FILE_FORMAT}'
     if not send_id_path.exists():
@@ -46,8 +50,13 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 
 @any_msg.handle()
 async def _(bot: Bot, event: PrivateMessageEvent, state: T_State):
+    await handle_private_message(bot, event, state)
+
+
+async def handle_private_message(bot: Bot, event: Event, state: T_State, is_self: bool = False):
+    user_id = event.user_id if not is_self else event.target_id
     send_id_path = define.SEND_USER_ID_PATH / \
-        f'{event.user_id}.{define.SEND_FILE_FORMAT}'
+        f'{user_id}.{define.SEND_FILE_FORMAT}'
     if not send_id_path.exists():
         send_id_path.touch()
 
@@ -60,7 +69,7 @@ async def _(bot: Bot, event: PrivateMessageEvent, state: T_State):
 - {message}
 
 '''
-    with open(define.RECV_USER_ID_PATH / f'{event.user_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
+    with open(define.RECV_USER_ID_PATH / f'{user_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
         f.write(text)
 
 
@@ -72,4 +81,7 @@ my_msg = on(
 
 @my_msg.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    print("my sent:", event)
+    if event.message_type == 'group':
+        await handle_group_message(bot, event, state, True)
+    elif event.message_type == 'private':
+        await handle_private_message(bot, event, state, True)

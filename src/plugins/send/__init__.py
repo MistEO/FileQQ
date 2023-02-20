@@ -48,15 +48,6 @@ async def sync_group():
         'group_id': group_id
     })
 
-    time = datetime.now().strftime('%H:%M:%S')
-    text = f'''
-**我** : _{time}_  
-- {context}
-
-'''
-    with open(define.RECV_GROUP_ID_PATH / f'{group_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
-        f.write(text)
-
 
 async def sync_friend():
     message = walk_sender(define.SEND_USER_ID_PATH)
@@ -75,15 +66,6 @@ async def sync_friend():
         'message': context,
         'user_id': user_id
     })
-
-    time = datetime.now().strftime('%H:%M:%S')
-    text = f'''
-**我** : _{time}_
-- {context}
-
-'''
-    with open(define.RECV_USER_ID_PATH / f'{user_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
-        f.write(text)
 
 
 send_sched = require('nonebot_plugin_apscheduler').scheduler
