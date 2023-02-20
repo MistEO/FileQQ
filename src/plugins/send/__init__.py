@@ -1,33 +1,7 @@
-from nonebot import get_bot, on_message, logger, require
-
-import os
-from pathlib import Path
-from datetime import datetime
+from nonebot import get_bot, logger, require
 
 import src.common.define as define
-
-
-def walk_sender(dir_path):
-    if not dir_path.exists():
-        return None
-
-    for file in os.listdir(dir_path):
-        path = os.path.join(dir_path, file)
-        if not os.path.getsize(path) or not Path(path).stem.isdigit():
-            continue
-
-        with open(path, "r") as f:
-            context = f.read()
-        if not context:
-            continue
-
-        if context.endswith("\n\n"):
-            return path, context[:-2]
-        elif context.endswith("#"):
-            return path, context[:-1]
-        # else 正在输入中
-
-    return None
+from .utils import walk_sender, text_2_msg
 
 
 async def sync_group():
@@ -36,12 +10,13 @@ async def sync_group():
         return
 
     path, context = message
-    group_id = Path(path).stem
+    group_id = path.stem
 
     # 先清空文件，避免重复发送
     with open(path, "w") as f:
         pass
 
+    context = text_2_msg(context)
     logger.info(f"发送群消息: {group_id}: {context}")
     await get_bot().call_api(
         "send_group_msg", **{"message": context, "group_id": group_id}
@@ -54,12 +29,13 @@ async def sync_friend():
         return
 
     path, context = message
-    user_id = Path(path).stem
+    user_id = path.stem
 
     # 先清空文件，避免重复发送
     with open(path, "w") as f:
         pass
 
+    context = text_2_msg(context)
     logger.info(f"发送私聊消息: {user_id}: {context}")
     await get_bot().call_api(
         "send_private_msg", **{"message": context, "user_id": user_id}
