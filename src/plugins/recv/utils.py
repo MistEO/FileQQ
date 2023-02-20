@@ -41,6 +41,8 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                 result += image_html(path)
             else:
                 result += f"[IMAGE](/{path})"
+            result += f"  <!-- {seg} -->"
+
         elif seg.type == "at":
             at_qq = seg.data["qq"]
             at_info = await get_bot().call_api(
@@ -54,9 +56,11 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             card = at_info["card"]
             card = card if card else nickname
             result += f"@{card} {avatar_html(at_qq)}"
+
         elif seg.type == "reply":
             reply_text = seg.data["text"]
             result += f"> {reply_text}\n\n"
+
         else:
             result += str(seg)
 
