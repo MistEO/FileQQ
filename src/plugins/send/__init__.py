@@ -15,15 +15,18 @@ def walk_sender(dir_path):
         path = os.path.join(dir_path, file)
         if not os.path.getsize(path) or not Path(path).stem.isdigit():
             continue
+
         with open(path, 'r') as f:
             context = f.read()
-            if context.endswith('\n\n'):
-                return path, context[:-2]
-            elif context.endswith('#'):
-                return path, context[:-1]
-            else:
-                # 正在输入中
-                pass
+        if not context:
+            continue
+
+        if context.endswith('\n\n'):
+            return path, context[:-2]
+        elif context.endswith('#'):
+            return path, context[:-1]
+        # else 正在输入中
+
     return None
 
 
