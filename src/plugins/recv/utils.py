@@ -51,9 +51,12 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             card = at_info['card']
             card = card if card else nickname
             result += f'@{card} {avatar_html(at_qq)}'
+        elif seg.type == 'reply':
+            reply_text = seg.data['text']
+            result += f'> {reply_text}\n\n'
         else:
             result += str(seg)
 
-        result += ' '
+        result += '  '
 
     return result
