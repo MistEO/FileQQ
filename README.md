@@ -28,7 +28,6 @@
 - 推荐使用 code-server（http 方式）。当然 ssh 也可以，不过有 ssh 为什么不用 vscode qq 呢？
 - `config.yaml` 里有一些选项可以看着改改
 - 可以把经常水的群创建个快捷方式（软链接）出来
-- 建议在 gocq 的 `config-template.yml` 中打开 `extra-reply-data` 以显示自己的消息
 
 ## 打赏
 
