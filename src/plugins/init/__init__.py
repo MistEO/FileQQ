@@ -10,6 +10,9 @@ import src.common.define as define
 
 @atexit.register
 def clear_cache():
+    shutil.rmtree(define.RECV_AVATAR_PATH, ignore_errors=True)
+    shutil.rmtree(define.RECV_IMAGE_PATH, ignore_errors=True)
+
     shutil.rmtree(define.RECV_GROUP_ID_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_GROUP_NAME_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_GROUP_MEMO_PATH, ignore_errors=True)
@@ -26,6 +29,9 @@ def clear_cache():
 
 
 def make_dirs():
+    os.makedirs(define.RECV_AVATAR_PATH, exist_ok=True)
+    os.makedirs(define.RECV_IMAGE_PATH, exist_ok=True)
+
     os.makedirs(define.RECV_GROUP_ID_PATH, exist_ok=True)
     os.makedirs(define.RECV_GROUP_NAME_PATH, exist_ok=True)
     os.makedirs(define.RECV_GROUP_MEMO_PATH, exist_ok=True)
