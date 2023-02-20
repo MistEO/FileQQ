@@ -8,6 +8,9 @@ import src.common.define as define
 
 
 def walk_sender(dir_path):
+    if not dir_path.exists():
+        return None
+
     for file in os.listdir(dir_path):
         path = os.path.join(dir_path, file)
         if not os.path.getsize(path) or not Path(path).stem.isdigit():

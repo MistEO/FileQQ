@@ -3,21 +3,29 @@ from nonebot.rule import Rule
 
 import os
 import shutil
+import atexit
 
 import src.common.define as define
 
 
-def make_dirs():
+@atexit.register
+def clear_cache():
+    shutil.rmtree(define.RECV_GROUP_ID_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_GROUP_NAME_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_GROUP_MEMO_PATH, ignore_errors=True)
+    shutil.rmtree(define.RECV_USER_ID_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_USER_NAME_PATH, ignore_errors=True)
     shutil.rmtree(define.RECV_USER_MEMO_PATH, ignore_errors=True)
 
+    shutil.rmtree(define.SEND_GROUP_ID_PATH, ignore_errors=True)
     shutil.rmtree(define.SEND_GROUP_NAME_PATH, ignore_errors=True)
     shutil.rmtree(define.SEND_GROUP_MEMO_PATH, ignore_errors=True)
+    shutil.rmtree(define.SEND_USER_ID_PATH, ignore_errors=True)
     shutil.rmtree(define.SEND_USER_NAME_PATH, ignore_errors=True)
     shutil.rmtree(define.SEND_USER_MEMO_PATH, ignore_errors=True)
 
+
+def make_dirs():
     os.makedirs(define.RECV_GROUP_ID_PATH, exist_ok=True)
     os.makedirs(define.RECV_GROUP_NAME_PATH, exist_ok=True)
     os.makedirs(define.RECV_GROUP_MEMO_PATH, exist_ok=True)
@@ -112,6 +120,7 @@ async def _(bot, event, state):
         return
 
     inited = True
+    clear_cache()
     make_dirs()
     await sync_groups()
     await sync_friends()
