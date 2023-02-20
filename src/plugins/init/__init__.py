@@ -137,14 +137,16 @@ async def sync_friends():
         send_memo_relpath = os.path.relpath(send_memo_path, recv_id_path.parent)
 
         with open(recv_id_path, "w") as f:
-            f.write(f"""
+            f.write(
+                f"""
 ## {remark} ({nickname}) {user_id}
 
 [REPLY_BY_ID]({send_id_relpath})  
 [REPLY_BY_NAME]({send_name_relpath})
 [REPLY_BY_MEMO]({send_memo_relpath})
 
-""")
+"""
+            )
         os.symlink(
             recv_id_path.absolute(),
             define.RECV_USER_NAME_PATH

@@ -9,10 +9,7 @@ import src.common.define as define
 from .utils import nbevent_2_mdmsg, avatar_html
 
 
-any_msg = on_message(
-    priority=100,
-    block=False
-)
+any_msg = on_message(priority=100, block=False)
 
 
 @any_msg.handle()
@@ -20,31 +17,39 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     await handle_group_message(bot, event, state)
 
 
-async def handle_group_message(bot: Bot, event: Event, state: T_State, is_self: bool = False):
-    send_id_path = define.SEND_GROUP_ID_PATH / \
-        f'{event.group_id}.{define.SEND_FILE_FORMAT}'
+async def handle_group_message(
+    bot: Bot, event: Event, state: T_State, is_self: bool = False
+):
+    send_id_path = (
+        define.SEND_GROUP_ID_PATH / f"{event.group_id}.{define.SEND_FILE_FORMAT}"
+    )
     if not send_id_path.exists():
         send_id_path.touch()
 
-    user_info = await get_bot().call_api('get_group_member_info', **{
-        'group_id': event.group_id,
-        'user_id': event.user_id,
-    })
+    user_info = await get_bot().call_api(
+        "get_group_member_info",
+        **{
+            "group_id": event.group_id,
+            "user_id": event.user_id,
+        },
+    )
 
     avatar = avatar_html(event.user_id)
-    nickname = user_info['nickname']
-    card = user_info['card']
+    nickname = user_info["nickname"]
+    card = user_info["card"]
     card = card if card else nickname
-    user_id = user_info['user_id']
-    time = datetime.now().strftime('%H:%M:%S')
+    user_id = user_info["user_id"]
+    time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 
-    text = f'''
+    text = f"""
 {avatar} **{card}** _({nickname}) {user_id}_ : _{time}_  
 - {message}
 
-'''
-    with open(define.RECV_GROUP_ID_PATH / f'{event.group_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
+"""
+    with open(
+        define.RECV_GROUP_ID_PATH / f"{event.group_id}.{define.RECV_FILE_FORMAT}", "a"
+    ) as f:
         f.write(text)
 
 
@@ -53,35 +58,35 @@ async def _(bot: Bot, event: PrivateMessageEvent, state: T_State):
     await handle_private_message(bot, event, state)
 
 
-async def handle_private_message(bot: Bot, event: Event, state: T_State, is_self: bool = False):
+async def handle_private_message(
+    bot: Bot, event: Event, state: T_State, is_self: bool = False
+):
     user_id = event.user_id if not is_self else event.target_id
-    send_id_path = define.SEND_USER_ID_PATH / \
-        f'{user_id}.{define.SEND_FILE_FORMAT}'
+    send_id_path = define.SEND_USER_ID_PATH / f"{user_id}.{define.SEND_FILE_FORMAT}"
     if not send_id_path.exists():
         send_id_path.touch()
 
     avatar = avatar_html(event.user_id)
-    time = datetime.now().strftime('%H:%M:%S')
+    time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 
-    text = f'''
+    text = f"""
 {avatar} : _{time}_  
 - {message}
 
-'''
-    with open(define.RECV_USER_ID_PATH / f'{user_id}.{define.RECV_FILE_FORMAT}', 'a') as f:
+"""
+    with open(
+        define.RECV_USER_ID_PATH / f"{user_id}.{define.RECV_FILE_FORMAT}", "a"
+    ) as f:
         f.write(text)
 
 
-my_msg = on(
-    "message_sent",
-    priority=100,
-    block=False)
+my_msg = on("message_sent", priority=100, block=False)
 
 
 @my_msg.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    if event.message_type == 'group':
+    if event.message_type == "group":
         await handle_group_message(bot, event, state, True)
-    elif event.message_type == 'private':
+    elif event.message_type == "private":
         await handle_private_message(bot, event, state, True)
