@@ -1,3 +1,5 @@
 recv:
   avatar: true  # 是否显示头像
   image: false  # 是否显示聊天图片
+
+debug: false    # 调试模式

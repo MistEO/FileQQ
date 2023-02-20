@@ -5,11 +5,11 @@ import httpx
 from pathlib import Path
 
 import src.common.define as define
-from .config import image_enabled, avatar_enabled
+from src.common.config import recv_image_enabled, recv_avatar_enabled
 
 
 def avatar_html(user_id: int, size: int = 32) -> str:
-    if avatar_enabled:
+    if recv_avatar_enabled:
         return f'<img src="https://q1.qlogo.cn/g?b=qq&nk={user_id}&s=640" width = "{size}" height = "{size}"/> '
     else:
         return ''
@@ -37,7 +37,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                     with open(path, 'wb') as f:
                         f.write(r.content)
             # 生成图片链接
-            if image_enabled:
+            if recv_image_enabled:
                 result += image_html(path)
             else:
                 result += f'[IMAGE](/{path})'
