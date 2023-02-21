@@ -3,6 +3,7 @@ from nonebot.adapters.onebot.v11 import Event, MessageSegment
 
 import httpx
 from pathlib import Path
+from typing import Tuple
 
 import src.common.define as define
 from src.common.config import recv_image_enabled, recv_avatar_enabled
@@ -19,12 +20,12 @@ def image_html(path: Path, scale: str = "30%") -> str:
     return f'<img src="{path.absolute()}" width = "{scale}"/>'
 
 
-async def get_nickname_in_group(user_id: int, group_id: int):
+async def get_nickname_in_group(user_id: int, group_id: int) -> Tuple[str, str]:
     user_info = await get_bot().call_api(
         "get_group_member_info",
         **{
-            "group_id": event.group_id,
-            "user_id": event.user_id,
+            "group_id": group_id,
+            "user_id": user_id,
         },
     )
 
@@ -65,14 +66,14 @@ async def nbevent_2_mdmsg(event: Event) -> str:
 
         elif seg.type == "at":
             at_qq = seg.data["qq"]
-            card, _ = get_nickname_in_group(at_qq, event.group_id)
+            card, _ = await get_nickname_in_group(at_qq, event.group_id)
             result += f"@**{card}** {avatar_html(at_qq)}"
 
         elif seg.type == "reply":
             reply_text = seg.data["text"]
             result += f"> {reply_text}\n\n"
 
-        else:
+        elif not str(seg).strip():
             result += f"`{seg}`"
 
         result += "  "
