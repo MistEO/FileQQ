@@ -90,8 +90,8 @@ async def sync_groups():
 ## {group_memo} ({group_name}) {group_id}
 
 [REPLY_BY_ID]({send_id_relpath})  
-[REPLY_BY_NAME]({send_name_relpath})  
-[REPLY_BY_MEMO]({send_memo_relpath})  
+[REPLY_BY_NAME](<{send_name_relpath}>)  
+[REPLY_BY_MEMO](<{send_memo_relpath}>)  
 
 """
             )
@@ -142,8 +142,8 @@ async def sync_friends():
 ## {remark} ({nickname}) {user_id}
 
 [REPLY_BY_ID]({send_id_relpath})  
-[REPLY_BY_NAME]({send_name_relpath})
-[REPLY_BY_MEMO]({send_memo_relpath})
+[REPLY_BY_NAME](<{send_name_relpath}>)  
+[REPLY_BY_MEMO](<{send_memo_relpath}>)  
 
 """
             )
