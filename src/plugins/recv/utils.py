@@ -73,7 +73,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             reply_text = seg.data["text"]
             result += f"> {reply_text}\n\n"
 
-        elif not str(seg).strip():
+        elif str(seg).strip():
             result += f"`{seg}`"
 
         result += "  "
