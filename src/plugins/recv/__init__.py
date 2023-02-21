@@ -6,7 +6,7 @@ from nonebot.adapters.onebot.v11 import GroupMessageEvent, PrivateMessageEvent, 
 from datetime import datetime
 
 import src.common.define as define
-from .utils import nbevent_2_mdmsg, avatar_html
+from .utils import nbevent_2_mdmsg, avatar_html, get_nickname_in_group
 
 
 any_msg = on_message(priority=100, block=False)
@@ -26,23 +26,9 @@ async def handle_group_message(
     if not send_id_path.exists():
         send_id_path.touch()
 
-    user_info = await get_bot().call_api(
-        "get_group_member_info",
-        **{
-            "group_id": event.group_id,
-            "user_id": event.user_id,
-        },
-    )
-
-    def name_replace(name: str) -> str:
-        # 简单弄下防注入
-        return name.replace("/", "").replace("\\", "").replace("$$", "")
-
-    avatar = avatar_html(event.user_id)
-    nickname = name_replace(user_info["nickname"])
-    card = name_replace(user_info["card"])
-    card = card if card else nickname
-    user_id = user_info["user_id"]
+    user_id = event.user_id
+    avatar = avatar_html(user_id)
+    card, nickname = await get_nickname_in_group(user_id, event.group_id)
     time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 

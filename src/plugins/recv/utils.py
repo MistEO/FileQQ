@@ -19,6 +19,26 @@ def image_html(path: Path, scale: str = "30%") -> str:
     return f'<img src="{path.absolute()}" width = "{scale}"/>'
 
 
+async def get_nickname_in_group(user_id: int, group_id: int):
+    user_info = await get_bot().call_api(
+        "get_group_member_info",
+        **{
+            "group_id": event.group_id,
+            "user_id": event.user_id,
+        },
+    )
+
+    def name_replace(name: str) -> str:
+        # 简单弄下防注入
+        return name.replace("/", "").replace("\\", "").replace("$$", "")
+
+    nickname = name_replace(user_info["nickname"])
+    card = name_replace(user_info["card"])
+    card = card if card else nickname
+
+    return card, nickname
+
+
 async def nbevent_2_mdmsg(event: Event) -> str:
     result = ""
     for seg in event.message:
@@ -45,16 +65,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
 
         elif seg.type == "at":
             at_qq = seg.data["qq"]
-            at_info = await get_bot().call_api(
-                "get_group_member_info",
-                **{
-                    "group_id": event.group_id,
-                    "user_id": at_qq,
-                },
-            )
-            nickname = at_info["nickname"]
-            card = at_info["card"]
-            card = card if card else nickname
+            card, _ = get_nickname_in_group(at_qq, event.group_id)
             result += f"@**{card}** {avatar_html(at_qq)}"
 
         elif seg.type == "reply":
@@ -62,7 +73,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             result += f"> {reply_text}\n\n"
 
         else:
-            result += f'`{seg}`'
+            result += f"`{seg}`"
 
         result += "  "
 
