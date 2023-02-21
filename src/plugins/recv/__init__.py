@@ -34,19 +34,24 @@ async def handle_group_message(
         },
     )
 
+    def name_replace(name: str) -> str:
+        # 简单弄下防注入
+        return name.replace("/", "").replace("\\", "").replace("$$", "")
+
     avatar = avatar_html(event.user_id)
-    nickname = user_info["nickname"]
-    card = user_info["card"]
+    nickname = name_replace(user_info["nickname"])
+    card = name_replace(user_info["card"])
     card = card if card else nickname
     user_id = user_info["user_id"]
     time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 
     text = f"""
-{avatar} **{card}** _({nickname}) {user_id}_ : _{time}_  
-- {message}
+**{card}** ({nickname}) {user_id} : _{time}_  
+{avatar}  {message}
 
 """
+
     with open(
         define.RECV_GROUP_ID_PATH / f"{event.group_id}.{define.RECV_FILE_FORMAT}", "a"
     ) as f:
@@ -71,8 +76,8 @@ async def handle_private_message(
     message = await nbevent_2_mdmsg(event)
 
     text = f"""
-{avatar} : _{time}_  
-- {message}
+_{time}_  
+{avatar}  {message}
 
 """
     with open(
