@@ -34,7 +34,8 @@ async def handle_group_message(
 
     text = f"""
 **{card}** ({nickname}) {user_id} : _{time}_  
-{avatar}  {message}
+{avatar}
+{message}
 
 """
 
@@ -63,7 +64,8 @@ async def handle_private_message(
 
     text = f"""
 _{time}_  
-{avatar}  {message}
+{avatar}
+{message}
 
 """
     with open(

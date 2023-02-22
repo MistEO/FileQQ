@@ -62,7 +62,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                 result += image_html(path)
             else:
                 result += f"[IMAGE](/{path})"
-            result += f"  <!-- {seg} -->"
+            result += f"\n<!--{seg}-->"
 
         elif seg.type == "at":
             at_qq = seg.data["qq"]
