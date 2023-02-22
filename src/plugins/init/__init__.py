@@ -6,7 +6,7 @@ import shutil
 import atexit
 
 import src.common.define as define
-from src.common.config import debug_mode
+from src.common.config import DEBUG_MODE
 
 
 @atexit.register

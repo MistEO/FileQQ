@@ -6,11 +6,11 @@ from pathlib import Path
 from typing import Tuple
 
 import src.common.define as define
-from src.common.config import recv_image_enabled, recv_avatar_enabled
+from src.common.config import RECV_IMAGE_ENABLED, RECV_AVATAR_ENABLED, FOCUS_GROUP, FOCUS_USER
 
 
 def avatar_html(user_id: int, size: int = 32) -> str:
-    if recv_avatar_enabled:
+    if RECV_AVATAR_ENABLED:
         return f'<img src="https://q1.qlogo.cn/g?b=qq&nk={user_id}&s=640" width = "{size}" height = "{size}"/> '
     else:
         return ""
@@ -58,7 +58,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                     with open(path, "wb") as f:
                         f.write(r.content)
             # 生成图片链接
-            if recv_image_enabled:
+            if RECV_IMAGE_ENABLED:
                 result += image_html(path)
             else:
                 result += f"[IMAGE](/{path})"

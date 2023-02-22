@@ -2,4 +2,15 @@ recv:
   avatar: true  # 是否显示头像
   image: false  # 是否显示聊天图片
 
+
+focus:
+  group:        # 关注的群
+    mode: whitelist
+    list: []
+
+  user:         # 关注的人
+    mode: blacklist
+    list: []
+
+
 debug: false    # 调试模式
