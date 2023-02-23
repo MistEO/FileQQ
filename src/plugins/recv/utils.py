@@ -62,20 +62,18 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                 result += image_html(path)
             else:
                 result += f"[IMAGE](/{path})"
-            result += f"\n<!--{seg}-->"
+            result += f"\n<!--{seg}-->\n"
 
         elif seg.type == "at":
             at_qq = seg.data["qq"]
             card, _ = await get_nickname_in_group(at_qq, event.group_id)
-            result += f"@**{card}** {avatar_html(at_qq)}"
+            result += f"**`@{card}`** {avatar_html(at_qq)}  "
 
         elif seg.type == "reply":
             reply_text = seg.data["text"]
-            result += f"> {reply_text}\n"
+            result += f"> {reply_text}\n\n"
 
         elif str(seg).strip():
-            result += f"`{seg}`"
-
-        result += "  \n"
+            result += f"`{seg}`  "
 
     return result
