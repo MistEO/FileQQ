@@ -9,11 +9,11 @@ RECV_AVATAR_ENABLED = GLOBAL_CONFIG["recv"]["avatar"]
 RECV_IMAGE_ENABLED = GLOBAL_CONFIG["recv"]["image"]
 
 FOCUS_GROUP = (
-    True if GLOBAL_CONFIG["focus"]["group"]["mode"] == "blacklist" else False,
+    GLOBAL_CONFIG["focus"]["group"]["mode"] != "blacklist",
     GLOBAL_CONFIG["focus"]["group"]["list"],
 )
 FOCUS_USER = (
-    True if GLOBAL_CONFIG["focus"]["user"]["mode"] == "blacklist" else False,
+    GLOBAL_CONFIG["focus"]["user"]["mode"] != "blacklist",
     GLOBAL_CONFIG["focus"]["user"]["list"],
 )
 

@@ -41,6 +41,13 @@ async def get_nickname_in_group(user_id: int, group_id: int) -> Tuple[str, str]:
 
 
 async def nbevent_2_mdmsg(event: Event) -> str:
+    is_group = event.message_type == "group"
+    focus_mode, focus_list = FOCUS_GROUP if is_group else FOCUS_USER
+    if focus_mode:
+        focus = event.group_id in focus_list if is_group else event.user_id in focus_list
+    else:
+        focus = event.group_id not in focus_list if is_group else event.user_id not in focus_list
+
     result = ""
     for seg in event.message:
         if isinstance(seg, dict):
@@ -48,15 +55,15 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             seg = MessageSegment(**seg)
 
         if seg.type == "image":
-            # 下载图片
             url = seg.data["url"]
             filename = seg.data["file"]
             path = (define.RECV_IMAGE_PATH / filename).with_suffix(".png")
-            if not path.exists():
+            if not path.exists() and focus:
+                # 下载图片
                 async with httpx.AsyncClient() as client:
                     r = await client.get(url)
-                    with open(path, "wb") as f:
-                        f.write(r.content)
+                with open(path, "wb") as f:
+                    f.write(r.content)
             # 生成图片链接
             if RECV_IMAGE_ENABLED:
                 result += image_html(path)
