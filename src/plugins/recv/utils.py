@@ -66,7 +66,7 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                     f.write(r.content)
             # 生成图片链接
             if RECV_IMAGE_ENABLED:
-                scale = 10 if seg.data["subType"] == "1" else 100
+                scale = 15 if seg.data["subType"] == "1" else 100
                 result += image_html(path, scale)
             else:
                 result += f"[IMAGE](/{path})"
