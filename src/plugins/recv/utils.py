@@ -16,8 +16,8 @@ def avatar_html(user_id: int, size: int = 32) -> str:
         return ""
 
 
-def image_html(path: Path, scale: str = "30%") -> str:
-    return f'<img src="{path.absolute()}" width = "{scale}"/>'
+def image_html(path: Path, scale: int = 100) -> str:
+    return f'<img src="{path.absolute()}" width = "{scale}%"/>'
 
 
 async def get_nickname_in_group(user_id: int, group_id: int) -> Tuple[str, str]:
@@ -66,7 +66,8 @@ async def nbevent_2_mdmsg(event: Event) -> str:
                     f.write(r.content)
             # 生成图片链接
             if RECV_IMAGE_ENABLED:
-                result += image_html(path)
+                scale = 10 if seg.data["subType"] == "1" else 100
+                result += image_html(path, scale)
             else:
                 result += f"[IMAGE](/{path})"
             result += f"\n<!--{seg}-->\n"
