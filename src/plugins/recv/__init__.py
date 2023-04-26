@@ -59,11 +59,12 @@ async def handle_private_message(
         send_id_path.touch()
 
     avatar = avatar_html(event.user_id)
+    card = "我" if is_self else "好友"
     time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 
     text = f"""
-_{time}_  
+**{card}** _{time}_  
 {avatar}
 {message}
 
