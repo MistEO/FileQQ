@@ -10,7 +10,7 @@ def walk_sender(dir_path: Path):
         if not path.stat().st_size or not path.stem.isdigit():
             continue
 
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             context = f.read()
         if not context:
             continue

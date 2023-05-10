@@ -84,7 +84,7 @@ async def sync_groups():
         send_name_relpath = os.path.relpath(send_name_path, recv_id_path.parent)
         send_memo_relpath = os.path.relpath(send_memo_path, recv_id_path.parent)
 
-        with open(recv_id_path, "w") as f:
+        with open(recv_id_path, "w", encoding='utf-8') as f:
             f.write(
                 f"""
 ## {group_memo} ({group_name}) {group_id}
@@ -136,7 +136,7 @@ async def sync_friends():
         send_name_relpath = os.path.relpath(send_name_path, recv_id_path.parent)
         send_memo_relpath = os.path.relpath(send_memo_path, recv_id_path.parent)
 
-        with open(recv_id_path, "w") as f:
+        with open(recv_id_path, "w", encoding="utf-8") as f:
             f.write(
                 f"""
 ## {remark} ({nickname}) {user_id}

@@ -1,6 +1,6 @@
 import yaml
 
-with open("config.yaml", "r") as f:
+with open("config.yaml", "r", encoding="utf-8") as f:
     GLOBAL_CONFIG = yaml.safe_load(f)
 
 print("GLOBAL_CONFIG:", GLOBAL_CONFIG)
