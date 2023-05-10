@@ -1,6 +1,6 @@
 from pathlib import Path
 import re
-
+from src.common.config import MESSAGE_SUFFIX
 
 def walk_sender(dir_path: Path):
     if not dir_path.exists():
@@ -33,3 +33,6 @@ def text_2_msg(text: str) -> str:
         return f"[CQ:at,qq={match.group(1)}]"
 
     return re.sub(r"@(\d+)", replace_at, text)
+
+def get_message_suffix() -> str:
+    return MESSAGE_SUFFIX

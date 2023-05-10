@@ -14,3 +14,5 @@ focus:
 
 
 debug: false    # 调试模式
+
+message_suffix: ''    #消息小尾巴
