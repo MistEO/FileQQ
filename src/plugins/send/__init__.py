@@ -13,7 +13,7 @@ async def sync_group():
     group_id = path.stem
 
     # 先清空文件，避免重复发送
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         pass
 
     context = text_2_msg(context)
@@ -32,7 +32,7 @@ async def sync_friend():
     user_id = path.stem
 
     # 先清空文件，避免重复发送
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         pass
 
     context = text_2_msg(context)

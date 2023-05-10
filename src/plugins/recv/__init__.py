@@ -40,7 +40,7 @@ async def handle_group_message(
 """
 
     with open(
-        define.RECV_GROUP_ID_PATH / f"{event.group_id}.{define.RECV_FILE_FORMAT}", "a"
+        define.RECV_GROUP_ID_PATH / f"{event.group_id}.{define.RECV_FILE_FORMAT}", "a", encoding="utf-8"
     ) as f:
         f.write(text)
 
@@ -70,7 +70,7 @@ async def handle_private_message(
 
 """
     with open(
-        define.RECV_USER_ID_PATH / f"{user_id}.{define.RECV_FILE_FORMAT}", "a"
+        define.RECV_USER_ID_PATH / f"{user_id}.{define.RECV_FILE_FORMAT}", "a", encoding="utf-8"
     ) as f:
         f.write(text)
 
