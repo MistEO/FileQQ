@@ -18,3 +18,5 @@ FOCUS_USER = (
 )
 
 DEBUG_MODE = GLOBAL_CONFIG["debug"]
+
+MESSAGE_SUFFIX = GLOBAL_CONFIG["message_suffix"]

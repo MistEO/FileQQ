@@ -1,7 +1,7 @@
 from nonebot import get_bot, logger, require
 
 import src.common.define as define
-from .utils import walk_sender, text_2_msg
+from .utils import walk_sender, text_2_msg, get_message_suffix
 
 
 async def sync_group():
@@ -11,12 +11,13 @@ async def sync_group():
 
     path, context = message
     group_id = path.stem
+    message_suffix = get_message_suffix()
 
     # 先清空文件，避免重复发送
     with open(path, "w", encoding="utf-8") as f:
         pass
 
-    context = text_2_msg(context)
+    context = text_2_msg(context + message_suffix)
     logger.info(f"发送群消息: {group_id}: {context}")
     await get_bot().call_api(
         "send_group_msg", **{"message": context, "group_id": group_id}
@@ -30,12 +31,13 @@ async def sync_friend():
 
     path, context = message
     user_id = path.stem
+    message_suffix = get_message_suffix()
 
     # 先清空文件，避免重复发送
     with open(path, "w", encoding="utf-8") as f:
         pass
 
-    context = text_2_msg(context)
+    context = text_2_msg(context + message_suffix)
     logger.info(f"发送私聊消息: {user_id}: {context}")
     await get_bot().call_api(
         "send_private_msg", **{"message": context, "user_id": user_id}
