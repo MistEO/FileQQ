@@ -6,7 +6,12 @@ from pathlib import Path
 from typing import Tuple
 
 import src.common.define as define
-from src.common.config import RECV_IMAGE_ENABLED, RECV_AVATAR_ENABLED, FOCUS_GROUP, FOCUS_USER
+from src.common.config import (
+    RECV_IMAGE_ENABLED,
+    RECV_AVATAR_ENABLED,
+    FOCUS_GROUP,
+    FOCUS_USER,
+)
 
 
 def avatar_html(user_id: int, size: int = 32) -> str:
@@ -44,9 +49,15 @@ async def nbevent_2_mdmsg(event: Event) -> str:
     is_group = event.message_type == "group"
     focus_mode, focus_list = FOCUS_GROUP if is_group else FOCUS_USER
     if focus_mode:
-        focus = event.group_id in focus_list if is_group else event.user_id in focus_list
+        focus = (
+            event.group_id in focus_list if is_group else event.user_id in focus_list
+        )
     else:
-        focus = event.group_id not in focus_list if is_group else event.user_id not in focus_list
+        focus = (
+            event.group_id not in focus_list
+            if is_group
+            else event.user_id not in focus_list
+        )
 
     result = ""
     for seg in event.message:
@@ -85,3 +96,25 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             result += f"`{seg}`  "
 
     return result
+
+
+friend_names = {}
+
+
+async def get_friends_names(user_id):
+    global friend_names
+    if len(friend_names) > 0:
+        if user_id in friend_names:
+            return friend_names[user_id]
+        else:
+            return f"**未知好友** {user_id}"
+
+    friend_list = await get_bot().call_api("get_friend_list", **{})
+    for friend in friend_list:
+        user_id = friend["user_id"]
+        nickname = friend["nickname"]
+        remark = friend["remark"] if "remark" in friend else nickname
+
+        friend_names[user_id] = f"**{remark}** ({nickname}) {user_id}"
+
+    return friend_names[user_id]

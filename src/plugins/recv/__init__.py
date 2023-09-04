@@ -6,7 +6,7 @@ from nonebot.adapters.onebot.v11 import GroupMessageEvent, PrivateMessageEvent, 
 from datetime import datetime
 
 import src.common.define as define
-from .utils import nbevent_2_mdmsg, avatar_html, get_nickname_in_group
+from .utils import nbevent_2_mdmsg, avatar_html, get_nickname_in_group, get_friends_names
 
 
 any_msg = on_message(priority=100, block=False)
@@ -59,7 +59,7 @@ async def handle_private_message(
         send_id_path.touch()
 
     avatar = avatar_html(event.user_id)
-    card = "我" if is_self else "好友"
+    card = "我" if is_self else await get_friends_names(event.user_id)
     time = datetime.now().strftime("%H:%M:%S")
     message = await nbevent_2_mdmsg(event)
 
