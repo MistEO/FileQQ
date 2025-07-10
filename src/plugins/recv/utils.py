@@ -35,6 +35,8 @@ async def get_nickname_in_group(user_id: int, group_id: int) -> Tuple[str, str]:
     )
 
     def name_replace(name: str) -> str:
+        if not name:
+            return ""
         # 简单弄下防注入
         return name.replace("/", "").replace("\\", "").replace("$$", "")
 
@@ -89,8 +91,9 @@ async def nbevent_2_mdmsg(event: Event) -> str:
             result += f"**`@{card}`** {avatar_html(at_qq)}  "
 
         elif seg.type == "reply":
-            reply_text = seg.data["text"]
-            result += f"> {reply_text}\n\n"
+            pass
+            # reply_text = seg.data["text"]
+            # result += f"> {reply_text}\n\n"
 
         elif str(seg).strip():
             result += f"`{seg}`  "

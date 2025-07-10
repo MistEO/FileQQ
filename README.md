@@ -13,7 +13,6 @@
     ```bash
     pip install nb-cli
     nb plugin install nonebot_plugin_apscheduler
-    nb plugin install nonebot_plugin_gocqhttp
     nb driver install websockets
     nb driver install fastapi
     ```
