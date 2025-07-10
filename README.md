@@ -18,9 +18,10 @@
     ```
 
 2. `nb run` 运行
-3. 打开 <http://localhost:8090/go-cqhttp/#/> 登录你的账号
-4. 在 `cache/recv` 文件夹下查看聊天记录
-5. 在对应的 `cache/send` 文件夹下回复消息，以 两个回车 或 `#` 结尾
+3. 运行 [Lagrange](https://github.com/LagrangeDev/Lagrange.Core), 请自行查阅文档
+4. Lagrange 的 appsettings.json 的 反向 Websocket 端口配置为 8043
+5. 在 `cache/recv` 文件夹下查看聊天记录
+6. 在对应的 `cache/send` 文件夹下回复消息，以 两个回车 或 `#` 结尾
 
 ## Tips
 
